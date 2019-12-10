@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <form action="/" method="post">
+            <div style="display: flex; flex-direction: column; align-items: baseline;">
+                <label>
+                    <input name="username">
+                </label>
+                <label>
+                    <input name="password" type="password">
+                </label>
+                <button type="submit">Login</button>
+                <span style="color: red;">{{ error }}</span>
+            </div>
+        </form>
+    </body>
+</html>
