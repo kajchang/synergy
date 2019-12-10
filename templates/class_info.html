@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ name }}</title>
+    </head>
+    <body>
+        <a href="/home">Home</a>
+        <br/>
+        {{ name }}
+        <br/>
+        {{ mark }} - {{ score }}
+        <br>
+        Assignments
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                    <tr>
+                        <td>{{ assignment.name }}</td>
+                        <td>{{ assignment.date }}</td>
+                        <td>{{ assignment.score }} / {{ assignment.max_score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

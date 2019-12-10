@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Course History</title>
+    </head>
+    <body>
+        <a href="/home">Home</a>
+        <br/>
+        Course History
+        <br/>
+        {% for year in course_history %}
+            {{ year }}
+            <br>
+            {% for semester in course_history[year] %}
+                Semester {{ loop.index }}
+                <ul>
+                    {% for course in semester %}
+                        <li>{{ course.name }} - {{ course.mark }} - {{ course.credits_completed }}/{{ course.credits_attempted }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    </body>
+</html>

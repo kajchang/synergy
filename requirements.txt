@@ -1,5 +1,5 @@
 flask==1.0.2
 flask-session==0.3.1
-studentvue==1.2.4
+studentvue==1.2.5
 gunicorn==19.7.1
 redis==3.0.1

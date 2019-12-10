@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Grades</title>
+    </head>
+    <body>
+        <a href="/home">Home</a>
+        <br/>
+        Schedule
+        <ul>
+            {% for class in schedule %}
+                <li>
+                    {%  if class.name in grade_book %}
+                        <a href="/class_info?class={{ dump(class) }}">
+                            {{ class.name }} - {{ grade_book[class.name]['mark'] }} {{ grade_book[class.name]['score'] }}
+                        </a>
+                    {% else %}
+                        {{ class.name }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

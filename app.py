@@ -3,8 +3,10 @@ from flask_session import RedisSessionInterface
 from redis import from_url
 
 from studentvue import StudentVue
+from studentvue.models import Class
 
 import os
+import json
 
 app = Flask(__name__)
 SESSION_TYPE = 'redis'
@@ -14,7 +16,7 @@ app.session_interface = RedisSessionInterface(from_url(REDIS_URL), 'session:')
 
 @app.route('/', methods=['GET'])
 def index():
-    if session.get('sv_cookie'):
+    if session.get('StudentVue'):
         return redirect(url_for('home'))
     else:
         return render_template('index.html')
@@ -29,24 +31,66 @@ def authenticate():
     except Exception:
         return render_template('index.html', error='Unexpected Error.')
 
-    session['sv_cookie'] = sv.session.cookies
-    session['name'] = sv.name
-    session['student_id'] = sv.id_
+    session['StudentVue'] = sv
     return redirect(url_for('home'))
 
 
 @app.route('/home', methods=['GET'])
 def home():
-    if session.get('sv_cookie'):
-        return render_template('home.html', **session)
+    if session.get('StudentVue'):
+        return render_template('home.html', **session.get('StudentVue').__dict__)
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/grades', methods=['GET'])
+def grades():
+    if session.get('StudentVue'):
+        sv = session.get('StudentVue')
+
+        def dump_class(class_):
+            res = class_.__dict__
+            res['teacher'] = res['teacher'].__dict__
+            return json.dumps(res)
+
+        return render_template('grades.html',
+                               schedule=sv.get_schedule(), grade_book=sv.get_grade_book(), dump=dump_class)
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/course_history', methods=['GET'])
+def course_history():
+    if session.get('StudentVue'):
+        sv = session.get('StudentVue')
+        return render_template('course_history.html', course_history=sv.get_course_history())
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/class_info', methods=['GET'])
+def class_info():
+    if session.get('StudentVue'):
+        if request.args.get('class'):
+            try:
+                sv = session.get('StudentVue')
+                class_ = Class(**json.loads(request.args.get('class')))
+                ctx = {}
+                ctx.update(class_.__dict__)
+                ctx.update(sv.get_class_info(class_))
+                return render_template('class_info.html', **ctx)
+            except Exception as e:
+                print(e)
+                return redirect(url_for('grades'))
+        else:
+            return redirect(url_for('grades'))
     else:
         return redirect(url_for('index'))
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    for item in list(session.keys()):
-        session.pop(item)
+    session.pop('StudentVue')
     return redirect(url_for('index'))
 
 
