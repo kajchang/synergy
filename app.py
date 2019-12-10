@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, render_template, session, url_for
-from flask_session import Session
+from flask_session import RedisSessionInterface
+from redis import Redis
 
 from studentvue import StudentVue
 
@@ -7,9 +8,8 @@ import os
 
 app = Flask(__name__)
 SESSION_TYPE = 'redis'
-REDIS_URL = os.environ.get('REDIS_URL', None)
-app.config.from_object(__name__)
-Session(app)
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://h:localhost:6379')
+app.session_interface = RedisSessionInterface(Redis(host=REDIS_URL.split(':')[2], port=REDIS_URL.split(':')[3]), 'session:')
 
 
 @app.route('/', methods=['GET'])
