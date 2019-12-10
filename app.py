@@ -9,12 +9,13 @@ import os
 app = Flask(__name__)
 SESSION_TYPE = 'redis'
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://h:localhost:6379')
-app.session_interface = RedisSessionInterface(Redis(host=REDIS_URL.split(':')[2], port=REDIS_URL.split(':')[3]), 'session:')
+app.session_interface = RedisSessionInterface(Redis(host=REDIS_URL.split(':')[2], port=REDIS_URL.split(':')[3]),
+                                              'session:')
 
 
 @app.route('/', methods=['GET'])
 def index():
-    if session.get('StudentVue'):
+    if session.get('sv_cookie'):
         return redirect(url_for('home'))
     else:
         return render_template('index.html')
@@ -29,21 +30,24 @@ def authenticate():
     except Exception:
         return render_template('index.html', error='Unexpected Error.')
 
-    session['StudentVue'] = sv
+    session['sv_cookie'] = sv.session.cookies
+    session['name'] = sv.name
+    session['student_id'] = sv.id_
     return redirect(url_for('home'))
 
 
 @app.route('/home', methods=['GET'])
 def home():
-    if session.get('StudentVue'):
-        return render_template('home.html', StudentVue=session.get('StudentVue'))
+    if session.get('sv_cookie'):
+        return render_template('home.html', **session)
     else:
         return redirect(url_for('index'))
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    session.pop('StudentVue')
+    for item in list(session.keys()):
+        session.pop(item)
     return redirect(url_for('index'))
 
 
