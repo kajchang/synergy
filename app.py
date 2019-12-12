@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, render_template, session, url_for
+from flask import Flask, redirect, request, render_template, send_from_directory, session, url_for
 from flask_session import RedisSessionInterface
 from redis import from_url
 
@@ -12,6 +12,11 @@ app = Flask(__name__)
 SESSION_TYPE = 'redis'
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 app.session_interface = RedisSessionInterface(from_url(REDIS_URL), 'session:')
+
+
+@app.route('/static/<path:path>')
+def static_files(path):
+    return send_from_directory('static', path)
 
 
 @app.route('/', methods=['GET'])

@@ -1,25 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Grades</title>
-    </head>
-    <body>
-        <a href="/home">Home</a>
-        <br/>
-        Schedule
+{% extends 'layout.html' %}
+{% block title %}Grades{% endblock %}
+{% block content %}
+    <div class="menu">
+        <img src="/static/images/icon-150x150.png" alt="logo">
+        <p><a href="/home"><< Home</a></p>
+        <h1>Schedule</h1>
         <ul>
             {% for class in schedule %}
-                <li>
-                    {%  if class.name in grade_book %}
-                        <a href="/class_info?class={{ dump(class) }}">
-                            {{ class.name }} - {{ grade_book[class.name]['mark'] }} {{ grade_book[class.name]['score'] }}
-                        </a>
-                    {% else %}
-                        {{ class.name }}
-                    {% endif %}
-                </li>
+            <li>
+                {%  if class.name in grade_book %}
+                <a href="/class_info?class={{ dump(class) }}">
+                    {{ class.name }} - {{ grade_book[class.name]['mark'] }}% {{ grade_book[class.name]['score'] }}
+                </a>
+                {% else %}
+                {{ class.name }}
+                {% endif %}
+            </li>
             {% endfor %}
         </ul>
-    </body>
-</html>
+    </div>
+{% endblock %}

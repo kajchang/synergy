@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Home</title>
-    </head>
-    <body>
-        {{ name }} - {{ id_ }}
-        <ul>
-            <li><a href="/grades">Classes</a></li>
-            <li><a href="/course_history">Course History</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
-    </body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div style="flex-grow: 1;"></div>
+    <div class="menu">
+        <img src="/static/images/icon-150x150.png" alt="logo">
+        <h1>{{ name }} - {{ id_ }}</h1>
+        <h1><a href="/grades">Classes</a></h1>
+        <h1><a href="/course_history">Course History</a></h1>
+        <h2><a href="/logout">Logout</a></h2>
+    </div>
+    <div style="flex-grow: 3;"></div>
+{% endblock %}

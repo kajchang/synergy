@@ -1,25 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Course History</title>
-    </head>
-    <body>
-        <a href="/home">Home</a>
-        <br/>
-        Course History
-        <br/>
-        {% for year in course_history %}
-            {{ year }}
-            <br>
-            {% for semester in course_history[year] %}
-                Semester {{ loop.index }}
-                <ul>
+{% extends 'layout.html' %}
+{% block title %}Course History{% endblock %}
+{% block content %}
+    <div class="menu">
+        <img src="/static/images/icon-150x150.png" alt="logo">
+        <p><a href="/home"><< Home</a></p>
+    </div>
+    <h1>Course History</h1>
+    {% for year, semesters in course_history.items() | sort(attribute='0', reverse=True) %}
+        {% set year_num = year | int %}
+        <h2>{{ ['Freshman', 'Sophomore', 'Junior', 'Senior'][year_num - 9] }}</h2>
+        <br>
+        {% for semester in semesters %}
+            {{ ['Fall', 'Spring'][loop.index - 1] }} Semester
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mark</th>
+                        <th>Credits</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for course in semester %}
-                        <li>{{ course.name }} - {{ course.mark }} - {{ course.credits_completed }}/{{ course.credits_attempted }}</li>
+                        <tr>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.mark }}</td>
+                            <td>{{ course.credits_completed }}/{{ course.credits_attempted }}</td>
+                        </tr>
                     {% endfor %}
-                </ul>
-            {% endfor %}
+                </tbody>
+            </table>
         {% endfor %}
-    </body>
-</html>
+    {% endfor %}
+ {% endblock %}

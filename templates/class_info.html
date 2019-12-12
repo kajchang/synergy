@@ -1,34 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ name }}</title>
-    </head>
-    <body>
-        <a href="/home">Home</a>
-        <br/>
-        {{ name }}
-        <br/>
-        {{ mark }} - {{ score }}
-        <br>
-        Assignments
-        <table>
-            <thead>
+{% extends 'layout.html' %}
+{% block title %}{{ name }}{% endblock %}
+{% block content %}
+    <div class="menu">
+        <img src="/static/images/icon-150x150.png" alt="logo">
+        <p><a href="/home"><< Home</a></p>
+        <h2>{{ name }}</h2>
+        <h3>{{ mark }} - {{ score }}%</h3>
+    </div>
+    <h2>Assignments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Due Date</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if assignments.__len__() == 0 %}
                 <tr>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Score</th>
+                    <td colspan="3" style="text-align: center;">No Assignments Found.</td>
                 </tr>
-            </thead>
-            <tbody>
+            {% else %}
                 {% for assignment in assignments %}
                     <tr>
                         <td>{{ assignment.name }}</td>
-                        <td>{{ assignment.date }}</td>
+                        <td>{{ assignment.date.strftime('%m/%d/%y') }}</td>
                         <td>{{ assignment.score }} / {{ assignment.max_score }}</td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </body>
-</html>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

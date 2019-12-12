@@ -1,21 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Login</title>
-    </head>
-    <body>
-        <form action="/" method="post">
-            <div style="display: flex; flex-direction: column; align-items: baseline;">
-                <label>
-                    <input name="username">
-                </label>
-                <label>
-                    <input name="password" type="password">
-                </label>
-                <button type="submit">Login</button>
-                <span style="color: red;">{{ error }}</span>
-            </div>
-        </form>
-    </body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}Login{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .login-form {
+            width: 300px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div style="flex-grow: 1;"></div>
+    <img src="/static/images/icon-150x150.png" alt="logo">
+    <form action="/" method="post" class="login-form">
+        <label>
+            <input name="username" type="text">
+        </label>
+        <label>
+            <input name="password" type="password">
+        </label>
+        <button type="submit">Login</button>
+        <p style="color: red;">{{ error }}</p>
+    </form>
+    <div style="flex-grow: 2;"></div>
+{% endblock %}
